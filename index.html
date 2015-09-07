@@ -1,0 +1,46 @@
+<html lang="en" ng-app = "weatherApp">
+    <head>
+        <title>AngularJS Weather Forcast SPA</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    
+        <style>
+            html, body, input, select, textarea{
+                font-size: 1.05em;   
+            }
+                .nav{
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+        </style>
+        <script src="http://code.angularjs.org/1.4.5/angular.min.js" type="text/javascript"></script>
+        <script src="http://code.angularjs.org/1.4.5/angular-route.min.js" type="text/javascript"></script>
+        <script src="http://code.angularjs.org/1.4.5/angular-resource.min.js" type="text/javascript"></script>
+        <script src="app.js" type="text/javascript"></script>
+    </head>
+    
+    
+    <body>
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="containter">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#/">AngularJS Weather</a>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#/"><i class="fa fa-home"></i> Home</a></li>
+                       
+                    </ul>
+
+                </div>
+            </nav>    
+        </header>
+        
+        <div class="container">
+        
+            <div ng-view></div>
+        
+        </div>
+        
+    </body>
+</html>
