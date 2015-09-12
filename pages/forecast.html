@@ -1,1 +1,32 @@
-<h4 ng-model="cityName">Forecast for {{cityName}}</h4>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h4 ng-model="weatherResult">Forecast for {{weatherResult.city.name}}</h4>
+        <div class="form-group">
+            <input type="text" class="form-control" ng-model="cityName" /><i><font size="2">Type in the box to search a different city</font></i>
+        </div>
+       <hr/>
+        
+        <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+        
+        
+        <div ng-repeat="w in weatherResult.list">
+            <div class="row" >
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{convertToDate(w.dt)}}</h3>
+                        </div>
+                        <div class="panel-body">
+                            Daytime Temp: {{convertToFahrenheit(w.temp.day)}} °F
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
