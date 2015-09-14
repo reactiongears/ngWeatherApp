@@ -66,9 +66,18 @@ weatherApp.controller('homeController', ['$scope', '$log', '$resource', 'citySer
 weatherApp.controller('forecastController', ['$scope', '$log', '$resource', '$filter', 'cityService', function ($scope, $log, $resource, $filter, cityService) {
     'use strict';
     $scope.cityName = cityService.cityName;
-    $scope.days = 1;
+    $scope.days = cityService.days;
+    $scope.daysLabel = cityService.daysLabel;
+    $scope.$watch('daysLabel');
     $scope.weatherApi = $resource("http://api.openweathermap.org/data/2.5/forecast/daily", {callback:"JSON_CALLBACK"}, { get:{ method: "JSONP" }});
-    $scope.weatherResult = $scope.weatherApi.get({q:$scope.cityName, cnt:2});
+    
+    $scope.setDays = function(count, label){
+        $scope.days = cityService.days = count;
+        $scope.daysLabel = cityService.daysLabel = label;
+        $scope.weatherResult = $scope.weatherApi.get({q:$scope.cityName, cnt:$scope.days});
+    }
+    $scope.weatherApi = $resource("http://api.openweathermap.org/data/2.5/forecast/daily", {callback:"JSON_CALLBACK"}, { get:{ method: "JSONP" }});
+    $scope.weatherResult = $scope.weatherApi.get({q:$scope.cityName, cnt:$scope.days});
     
     $scope.weatherResult.$promise.then(function(resp){
         $scope.cityCoords = resp["city"]["coord"];
