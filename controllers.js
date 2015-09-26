@@ -93,8 +93,8 @@ weatherApp.controller('forecastController', ['$scope', '$log', 'weatherService',
                                 mapTypeId           :google.maps.MapTypeId.TERRAIN}
             
             
-            var marker = new google.maps.Marker({position:{ latitude: $scope.cityCoords.lat, longitude: $scope.cityCoords.lon }});
-            marker.setMap($scope.map);
+            //var marker = new google.maps.Marker({position:{ latitude: $scope.cityCoords.lat, longitude: $scope.cityCoords.lon }});
+            //marker.setMap($scope.map);
         });
     });
     

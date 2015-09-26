@@ -1,9 +1,21 @@
  <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">{{convertToDate({dt: weatherDay.dt}) | date: dateFormat}}</h3>
+        <div id="textbox">
+            <h4 class="alignleft">{{convertToDate({dt: weatherDay.dt}) | date: dateFormat}}</h4>
+            <h5 class="alignright">{{weatherDay.weather[0].description | uppercase}}</h5>
+            <div class ="spacer" style="clear: both;"></div>
+        </div>
     </div>
     <div class="panel-body">
-        Daytime Temp: {{convertToStandard({daytimeTemp:weatherDay.temp.day})}} °F
+        <p class="alignleft">
+            Daytime Temp: {{convertToStandard({daytimeTemp:weatherDay.temp.day})}} °F<br/>
+            High of {{convertToStandard({daytimeTemp:weatherDay.temp.max})}} °F with a  
+            Low of {{convertToStandard({daytimeTemp:weatherDay.temp.min})}} °F
+        </p>
+        <p class="alignright">
+            <img src="http://openweathermap.org/img/w/{{weatherDay.weather[0].icon}}.png">
+        </p>
+        
     </div>
 
 </div>
