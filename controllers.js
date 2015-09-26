@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------------------------------------------------
 //                                  Home Page Controller
 //------------------------------------------------------------------------------------------------------------------------------------------
-weatherApp.controller('homeController', ['$scope', '$log', 'weatherService', 'cityService', function ($scope, $log, weatherService, cityService) {
+weatherApp.controller('homeController', ['$scope', '$log', '$location', 'weatherService', 'cityService', function ($scope, $log, $location, weatherService, cityService) {
     'use strict';
     $log.info("You are on the Home Page");
     
@@ -18,16 +18,30 @@ weatherApp.controller('homeController', ['$scope', '$log', 'weatherService', 'ci
     $scope.$watch('cityName', function () {
         
         cityService.cityName = $scope.cityName;
-        $log.info($scope.cityName);
         
         if (cityService.cityName != undefined) {
             
             $scope.weatherResult = weatherService.GetWeather($scope.cityName, cityService.days);
-            if ($scope.weatherResult != undefined) {
-                $scope.validCity = true;
-            }
+            $scope.weatherResult.$promise.then(function (resp) {
+                $log.info(resp['city']['name'][0]);
+                $log.info($scope.cityName[0]);
+                if ($scope.weatherResult != undefined && resp['city']['name'][0] == $scope.cityName[0]) {
+                    $scope.validCity = true;
+                }else{
+                    $scope.validCity = false;
+                    $scope.weatherResult = null;
+                }
+                
+            });
+            
         }
     });
+    
+    $scope.submit = function(){ 
+        if ($scope.validCity) {
+            $location.path("/forecast");
+        }
+    };
     
 }]);
 
@@ -73,6 +87,14 @@ weatherApp.controller('forecastController', ['$scope', '$log', 'weatherService',
             $log.info(resp["city"]["coord"]);
             $scope.cityCoords = resp["city"]["coord"];
             $scope.map = { center: { latitude: $scope.cityCoords.lat, longitude: $scope.cityCoords.lon }, zoom: 12 };
+            $scope.mapOption = {disableDefaultUI    :true,
+                                draggable           :false,
+                                scrollwheel         :false,
+                                mapTypeId           :google.maps.MapTypeId.TERRAIN}
+            
+            
+            var marker = new google.maps.Marker({position:{ latitude: $scope.cityCoords.lat, longitude: $scope.cityCoords.lon }});
+            marker.setMap($scope.map);
         });
     });
     

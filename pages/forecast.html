@@ -21,8 +21,9 @@
         <br/><br/>
         <p><i><font size="2">Type in the box to change city</font></i></p>
         
-        <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
-        
+        <!-- Google Maps Directive -->
+        <ui-gmap-google-map center='map.center' zoom='map.zoom' options='mapOption'></ui-gmap-google-map>
+        <!-- Google Maps Directive -->
         
         <div ng-repeat="w in weatherResult.list">
             <div class="row" >
