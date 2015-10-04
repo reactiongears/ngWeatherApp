@@ -19,11 +19,20 @@
             </div>
         </div>
         <br/><br/>
-        <p><i><font size="2">Type in the box to change city</font></i></p>
+        
+        <div class="alert alert-info" role="alert" ng-hide="validCity">Enter a City name above.</div>
         
         <!-- Google Maps Directive -->
-        <ui-gmap-google-map center='map.center' zoom='map.zoom' options='mapOption'></ui-gmap-google-map>
+        <ui-gmap-google-map ng-show="validCity" center='map.center' zoom='map.zoom' options='mapOption'></ui-gmap-google-map>
         <!-- Google Maps Directive -->
+        
+        <div class="panel panel-default" ng-show="validCity">
+            <div class="panel-body">
+                <font size="3">
+                    Current Weather in {{currentWeather.name}} is {{convertToFahrenheit(currentWeather.main.temp)}} °F with {{currentWeather.weather[0].description}}.
+                </font>
+            </div>
+        </div>
         
         <div ng-repeat="w in weatherResult.list">
             <div class="row" >

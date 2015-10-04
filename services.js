@@ -8,10 +8,18 @@ weatherApp.service('cityService', function () {
     this.daysLabel = "Today";
 });
 
-weatherApp.service('weatherService', ['$resource', function ($resource) {
+weatherApp.service('forecastService', ['$resource', function ($resource) {
     'use strict';
     this.GetWeather = function (cityName, days) {
         var weatherApi = $resource("http://api.openweathermap.org/data/2.5/forecast/daily", {callback: "JSON_CALLBACK"}, { get: { method: "JSONP" }});
         return weatherApi.get({q: cityName, cnt: days});
+    };
+}]);
+
+weatherApp.service('weatherService', ['$resource', function ($resource) {
+    'use strict';
+    this.GetWeather = function (cityName) {
+        var weatherApi = $resource("http://api.openweathermap.org/data/2.5/weather", {callback: "JSON_CALLBACK"}, { get: { method: "JSONP" }});
+        return weatherApi.get({q: cityName});
     };
 }]);

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------------------------------------------------------------------
 //                                  Home Page Controller
 //------------------------------------------------------------------------------------------------------------------------------------------
-weatherApp.controller('homeController', ['$scope', '$log', '$location', 'weatherService', 'cityService', function ($scope, $log, $location, weatherService, cityService) {
+weatherApp.controller('homeController', ['$scope', '$log', '$location', 'weatherService', 'forecastService', 'cityService', function ($scope, $log, $location, weatherService, forecastService, cityService) {
     'use strict';
     $log.info("You are on the Home Page");
     
@@ -21,7 +21,7 @@ weatherApp.controller('homeController', ['$scope', '$log', '$location', 'weather
         
         if (cityService.cityName != undefined) {
             
-            $scope.weatherResult = weatherService.GetWeather($scope.cityName, cityService.days);
+            $scope.weatherResult = forecastService.GetWeather($scope.cityName, cityService.days);
             $scope.weatherResult.$promise.then(function (resp) {
                 $log.info(resp['city']['name'][0]);
                 $log.info($scope.cityName[0]);
@@ -49,20 +49,20 @@ weatherApp.controller('homeController', ['$scope', '$log', '$location', 'weather
 //------------------------------------------------------------------------------------------------------------------------------------------
 //                                 Forcast Page Controller
 //------------------------------------------------------------------------------------------------------------------------------------------
-weatherApp.controller('forecastController', ['$scope', '$log', 'weatherService', '$filter', 'cityService', function ($scope, $log, weatherService, $filter, cityService) {
+weatherApp.controller('forecastController', ['$scope', '$log', 'weatherService', 'forecastService',  '$filter', 'cityService', function ($scope, $log, weatherService, forecastService, $filter, cityService) {
     'use strict';
     $scope.cityName = cityService.cityName;
     $scope.days = cityService.days;
     $scope.daysLabel = cityService.daysLabel;
-    $scope.$watch('daysLabel');
+    $scope.validCity = true;
     
     $scope.setDays = function (count, label) {
         $scope.days = cityService.days = count;
         $scope.daysLabel = cityService.daysLabel = label;
-        $scope.weatherResult = weatherService.GetWeather($scope.cityName, cityService.days);
     };
     
-    $scope.weatherResult = weatherService.GetWeather($scope.cityName, cityService.days);
+    $scope.weatherResult = forecastService.GetWeather($scope.cityName, cityService.days);
+    $scope.currentWeather = weatherService.GetWeather($scope.cityName);
     
     $scope.weatherResult.$promise.then(function (resp) {
         $scope.cityCoords = resp['city']['coord'];
@@ -79,10 +79,16 @@ weatherApp.controller('forecastController', ['$scope', '$log', 'weatherService',
         return new Date(dt * 1000);
     };
     
+    //Event Listeners
+     $scope.$watch('daysLabel', function () {
+        $scope.weatherResult = forecastService.GetWeather($scope.cityName, cityService.days);
+     });
+    
+    
     $scope.$watch('cityName', function () {
         cityService.cityName = $scope.cityName;
-        $scope.weatherResult = weatherService.GetWeather($scope.cityName, cityService.days);
-         
+        $scope.weatherResult = forecastService.GetWeather($scope.cityName, cityService.days);
+        $scope.currentWeather = weatherService.GetWeather($scope.cityName); 
         $scope.weatherResult.$promise.then(function (resp) {
             $log.info(resp["city"]["coord"]);
             $scope.cityCoords = resp["city"]["coord"];
@@ -92,6 +98,12 @@ weatherApp.controller('forecastController', ['$scope', '$log', 'weatherService',
                                 scrollwheel         :false,
                                 mapTypeId           :google.maps.MapTypeId.TERRAIN}
             
+            if ($scope.weatherResult != undefined && resp['city']['name'][0] == $scope.cityName[0]) {
+                $scope.validCity = true;
+            }else{
+                $scope.validCity = false;
+                $scope.weatherResult = null;
+            }
             
             //var marker = new google.maps.Marker({position:{ latitude: $scope.cityCoords.lat, longitude: $scope.cityCoords.lon }});
             //marker.setMap($scope.map);
